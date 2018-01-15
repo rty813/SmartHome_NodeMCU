@@ -36,4 +36,5 @@ dependencies {
     compile 'lib.kingja.switchbutton:switchbutton:1.1.6'
     compile 'com.github.santalu:mask-edittext:1.0.1'
     compile 'com.github.zcweng:switch-button:0.0.3@aar'
+    compile 'com.karumi:dexter:4.2.0'
 }

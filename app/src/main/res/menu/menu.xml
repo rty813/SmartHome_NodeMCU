@@ -3,4 +3,7 @@
     <item
         android:title="服务器地址与端口"
         android:id="@+id/menu_server"/>
+    <item
+        android:title="设置Wifi"
+        android:id="@+id/menu_wifi"/>
 </menu>

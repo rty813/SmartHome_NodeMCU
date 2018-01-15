@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/SmartHome_NodeMCU.iml" filepath="$PROJECT_DIR$/SmartHome_NodeMCU.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/nodemcu.iml" filepath="$PROJECT_DIR$/nodemcu.iml" />
+      <module fileurl="file://C:\Users\zhang\AndroidStudioProjects\SmartHome_NodeMCU\app\app.iml" filepath="C:\Users\zhang\AndroidStudioProjects\SmartHome_NodeMCU\app\app.iml" />
+      <module fileurl="file://C:\Users\zhang\AndroidStudioProjects\SmartHome_NodeMCU\nodemcu.iml" filepath="C:\Users\zhang\AndroidStudioProjects\SmartHome_NodeMCU\nodemcu.iml" />
     </modules>
   </component>
 </project>

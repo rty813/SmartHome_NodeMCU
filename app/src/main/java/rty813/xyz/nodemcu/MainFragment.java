@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -113,8 +114,16 @@ public class MainFragment extends NoFragment implements SwitchMultiButton.OnSwit
                         .setNegativeButton("取消", null)
                         .show();
                 break;
+            case R.id.menu_wifi:
+                startFragmentForResult(WifiFragment.class, 0);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, @Nullable Bundle result) {
+        super.onFragmentResult(requestCode, resultCode, result);
     }
 
     private class MyHandler extends Handler{
@@ -131,7 +140,7 @@ public class MainFragment extends NoFragment implements SwitchMultiButton.OnSwit
                         public void run() {
                             isConnected = true;
                         }
-                    }, 1500);
+                    }, 500);
                     break;
                 case 2:
                     switchMultiButton.setSelectedTab(0);
@@ -161,7 +170,8 @@ public class MainFragment extends NoFragment implements SwitchMultiButton.OnSwit
                                 socketAddress = new InetSocketAddress(addr, port);
                                 client.connect(socketAddress, 3000);
                                 reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                                printer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())), true);
+                                printer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())));
+                                new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
                                 String str = reader.readLine();
                                 str.trim();
                                 if ((str.contains("1") || str.contains("0")) && str.length() >= 8) {
@@ -207,7 +217,8 @@ public class MainFragment extends NoFragment implements SwitchMultiButton.OnSwit
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    printer.println(state);
+                    printer.print(state);
+                    printer.flush();
                 }
             }).start();
         }
