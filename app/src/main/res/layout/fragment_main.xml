@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:id="@+id/mainfragmentroot"
     tools:context="rty813.xyz.nodemcu.MainFragment">
 
     <android.support.v7.widget.Toolbar
@@ -31,68 +32,162 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp">
-        <com.suke.widget.SwitchButton
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:id="@+id/switch1"/>
-        <com.suke.widget.SwitchButton
+            android:orientation="vertical">
+            <com.suke.widget.SwitchButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch1"/>
+            <com.gregacucnik.EditTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ettEmptyText="Add"
+                app:ettTextMarginLeft="10dp"
+                android:id="@+id/etv_name1"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:id="@+id/switch2"/>
-        <com.suke.widget.SwitchButton
+            android:orientation="vertical">
+            <com.suke.widget.SwitchButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch2"/>
+            <com.gregacucnik.EditTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ettEmptyText="Add"
+                app:ettTextMarginLeft="10dp"
+                android:id="@+id/etv_name2"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:id="@+id/switch3"/>
-        <com.suke.widget.SwitchButton
+            android:orientation="vertical">
+            <com.suke.widget.SwitchButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch3"/>
+            <com.gregacucnik.EditTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ettEmptyText="Add"
+                app:ettTextMarginLeft="10dp"
+                android:id="@+id/etv_name3"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:id="@+id/switch4"/>
+            android:orientation="vertical">
+            <com.suke.widget.SwitchButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch4"/>
+            <com.gregacucnik.EditTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ettEmptyText="Add"
+                app:ettTextMarginLeft="10dp"
+                android:id="@+id/etv_name4"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp">
-        <com.suke.widget.SwitchButton
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:id="@+id/switch5"/>
-        <com.suke.widget.SwitchButton
+            android:orientation="vertical">
+            <com.suke.widget.SwitchButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch5"/>
+            <com.gregacucnik.EditTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ettEmptyText="Add"
+                app:ettTextMarginLeft="10dp"
+                android:id="@+id/etv_name5"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:id="@+id/switch6"/>
-        <com.suke.widget.SwitchButton
+            android:orientation="vertical">
+            <com.suke.widget.SwitchButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch6"/>
+            <com.gregacucnik.EditTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ettEmptyText="Add"
+                app:ettTextMarginLeft="10dp"
+                android:id="@+id/etv_name6"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:id="@+id/switch7"/>
-        <com.suke.widget.SwitchButton
+            android:orientation="vertical">
+            <com.suke.widget.SwitchButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch7"/>
+            <com.gregacucnik.EditTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ettTextMarginLeft="10dp"
+                app:ettEmptyText="Add"
+                android:id="@+id/etv_name7"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:id="@+id/switch8"/>
+            android:orientation="vertical">
+            <com.suke.widget.SwitchButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch8"/>
+            <com.gregacucnik.EditTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ettEmptyText="Add"
+                app:ettTextMarginLeft="10dp"
+                android:id="@+id/etv_name8"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

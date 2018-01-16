@@ -15,6 +15,8 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
@@ -57,8 +59,9 @@ public class WifiFragment extends NoFragment {
     private PrintWriter printer;
     private Socket socket;
     private String ssid = null;
-    private String pwd = null;
     private int type;
+    private boolean hasConnected = false;
+    private MyHandler mHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +77,7 @@ public class WifiFragment extends NoFragment {
         wifiList = new ArrayList<>();
         adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, wifiList);
         listView.setAdapter(adapter);
+        mHandler = new MyHandler();
         wifiAdmin = WifiAdmin.getInstance(getContext());
         wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         IntentFilter intentFilter = new IntentFilter();
@@ -124,6 +128,19 @@ public class WifiFragment extends NoFragment {
         super.onDetach();
     }
 
+    private class MyHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    Toast.makeText(getContext(), "连接失败", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -159,46 +176,77 @@ public class WifiFragment extends NoFragment {
             else if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
                 NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                 if (info.getState().equals(NetworkInfo.State.CONNECTED)) {
-                    if (wifiManager.getConnectionInfo().getSSID().contains("nodemcu") && ssid != null){
+                    if (wifiManager.getConnectionInfo().getSSID().contains("nodemcu") && ssid != null && !hasConnected){
+                        hasConnected = true;
                         Toast.makeText(getContext(), "已连接到nodemcu", Toast.LENGTH_SHORT).show();
-                        try {
-                            socket = new Socket("192.168.1.1", 2323);
-                            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                            printer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
-                            final EditText editText = new EditText(getContext());
-                            editText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            editText.setHint("请输入Wifi密码");
-                            new AlertDialog.Builder(getContext())
-                                    .setView(editText)
-                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            try {
-                                                printer.print(ssid);
-                                                printer.flush();
-                                                String str = reader.readLine();
-                                                if (str.contains("pwd")){
-                                                    printer.print(editText.getText().toString());
-                                                    printer.flush();
-                                                    str = reader.readLine();
-                                                    /*连接到指定Wifi，并获得IP地址。
-                                                     *
-                                                     */
-                                                    Bundle bundle = new Bundle();
-                                                    bundle.putString("addr", str);
-                                                    setResult(RESULT_OK, "addr", bundle);
-                                                    finish();
-                                                }
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
+                        final EditText editText = new EditText(getContext());
+                        editText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        editText.setHint("请输入Wifi密码");
+                        new AlertDialog.Builder(getContext())
+                                .setView(editText)
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    socket = new Socket("192.168.1.1", 2323);
+                                                    reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                                                    printer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "gbk")));
+                                                    String str = reader.readLine();
+                                                    if (str.contains("ssid")){
+                                                        printer.print(ssid);
+                                                        printer.flush();
+                                                        str = reader.readLine();
+                                                        if (str.contains("pwd")){
+                                                            printer.print(editText.getText().toString());
+                                                            printer.flush();
+                                                            str = reader.readLine();
+                                                            if (str.contains("err")){
+                                                                dialog.dismiss();
+                                                                ssid = null;
+                                                                hasConnected = false;
+                                                                mHandler.sendEmptyMessage(1);
+                                                                return;
+                                                            }
+                                                            System.out.println(type);
+                                                            wifiManager.disconnect();
+                                                            WifiConfiguration config = CreateWifiInfo(ssid, editText.getText().toString(), type);
+                                                            int netId = config.networkId;
+                                                            if (netId == -1) {
+                                                                netId = wifiManager.addNetwork(config);
+                                                            }
+                                                            wifiManager.enableNetwork(netId, true);
 
-                                        }
-                                    })
-                                    .show();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                                                            dialog.dismiss();
+                                                            Bundle bundle = new Bundle();
+                                                            bundle.putString("addr", str);
+                                                            WifiFragment.this.setResult(RESULT_OK, bundle);
+                                                            finish();
+                                                        }
+                                                    }
+
+                                                } catch (IOException e) {
+                                                    dialog.dismiss();
+                                                    ssid = null;
+                                                    hasConnected = false;
+                                                    mHandler.sendEmptyMessage(1);
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }).start();
+                                    }
+                                })
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(DialogInterface dialogInterface) {
+                                        hasConnected = false;
+                                        ssid = null;
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
                     }
                 }
             }

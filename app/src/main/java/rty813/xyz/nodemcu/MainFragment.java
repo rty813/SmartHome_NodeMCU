@@ -15,9 +15,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.gregacucnik.EditTextView;
 import com.suke.widget.SwitchButton;
 import com.yanzhenjie.fragment.NoFragment;
 
@@ -32,12 +35,14 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import lib.kingja.switchbutton.SwitchMultiButton;
 
 
-public class MainFragment extends NoFragment implements SwitchMultiButton.OnSwitchListener, SwitchButton.OnCheckedChangeListener {
+public class MainFragment extends NoFragment implements SwitchMultiButton.OnSwitchListener, SwitchButton.OnCheckedChangeListener, EditTextView.EditTextViewListener {
     private ArrayList<SwitchButton> switchButtons;
+    private ArrayList<EditTextView> etvNames;
     private SwitchMultiButton switchMultiButton;
     private String addr;
     private int port;
@@ -58,6 +63,15 @@ public class MainFragment extends NoFragment implements SwitchMultiButton.OnSwit
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        etvNames = new ArrayList<>();
+        etvNames.add((EditTextView) view.findViewById(R.id.etv_name1));
+        etvNames.add((EditTextView) view.findViewById(R.id.etv_name2));
+        etvNames.add((EditTextView) view.findViewById(R.id.etv_name3));
+        etvNames.add((EditTextView) view.findViewById(R.id.etv_name4));
+        etvNames.add((EditTextView) view.findViewById(R.id.etv_name5));
+        etvNames.add((EditTextView) view.findViewById(R.id.etv_name6));
+        etvNames.add((EditTextView) view.findViewById(R.id.etv_name7));
+        etvNames.add((EditTextView) view.findViewById(R.id.etv_name8));
         switchButtons = new ArrayList<>();
         switchButtons.add((SwitchButton) view.findViewById(R.id.switch1));
         switchButtons.add((SwitchButton) view.findViewById(R.id.switch2));
@@ -76,6 +90,22 @@ public class MainFragment extends NoFragment implements SwitchMultiButton.OnSwit
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("server", Context.MODE_PRIVATE);
         addr = sharedPreferences.getString("addr", "");
         port = sharedPreferences.getInt("port", 0);
+        for (int i = 0; i < 8; i++){
+            etvNames.get(i).setText(sharedPreferences.getString(String.format(Locale.getDefault(),
+                    "name%d", i), String.valueOf(i)));
+            etvNames.get(i).setEditTextViewListener(this);
+        }
+        final LinearLayout linearLayout = view.findViewById(R.id.mainfragmentroot);
+        linearLayout.setFocusable(true);
+        linearLayout.setClickable(true);
+        view.findViewById(R.id.mainfragmentroot).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayout.requestFocus();
+                InputMethodManager inputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        });
         mHandler = new MyHandler();
     }
 
@@ -123,7 +153,32 @@ public class MainFragment extends NoFragment implements SwitchMultiButton.OnSwit
 
     @Override
     public void onFragmentResult(int requestCode, int resultCode, @Nullable Bundle result) {
+        if (resultCode == RESULT_OK){
+//            Toast.makeText(getContext(), result.getString("addr"), Toast.LENGTH_SHORT).show();
+            addr = result.getString("addr").split(";")[0];
+            port = Integer.parseInt(result.getString("addr").split(";")[1]);
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("server", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("addr", addr);
+            editor.putInt("port", port);
+            editor.apply();
+        }
         super.onFragmentResult(requestCode, resultCode, result);
+    }
+
+    @Override
+    public void onEditTextViewEditModeStart() {
+
+    }
+
+    @Override
+    public void onEditTextViewEditModeFinish(String text) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("server", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        for (int i = 0; i < 8; i++){
+            editor.putString(String.format(Locale.getDefault(),"name%d", i), etvNames.get(i).getText());
+        }
+        editor.apply();
     }
 
     private class MyHandler extends Handler{
@@ -161,7 +216,7 @@ public class MainFragment extends NoFragment implements SwitchMultiButton.OnSwit
 //        Toast.makeText(getActivity(), tabText, Toast.LENGTH_SHORT).show();
         try {
             if (position == 1){
-                if (port != 0 && !addr.equals("")){
+                if (port != 0 && !addr.equals("") && port != 0){
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
