@@ -47,7 +47,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:ettEmptyText="Add"
-                app:ettTextMarginLeft="10dp"
                 android:id="@+id/etv_name1"/>
         </LinearLayout>
 
@@ -66,7 +65,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:ettEmptyText="Add"
-                app:ettTextMarginLeft="10dp"
                 android:id="@+id/etv_name2"/>
         </LinearLayout>
 
@@ -85,7 +83,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:ettEmptyText="Add"
-                app:ettTextMarginLeft="10dp"
                 android:id="@+id/etv_name3"/>
         </LinearLayout>
 
@@ -104,7 +101,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:ettEmptyText="Add"
-                app:ettTextMarginLeft="10dp"
                 android:id="@+id/etv_name4"/>
         </LinearLayout>
     </LinearLayout>
@@ -128,7 +124,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:ettEmptyText="Add"
-                app:ettTextMarginLeft="10dp"
                 android:id="@+id/etv_name5"/>
         </LinearLayout>
 
@@ -147,7 +142,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:ettEmptyText="Add"
-                app:ettTextMarginLeft="10dp"
                 android:id="@+id/etv_name6"/>
         </LinearLayout>
 
@@ -165,7 +159,6 @@
             <com.gregacucnik.EditTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:ettTextMarginLeft="10dp"
                 app:ettEmptyText="Add"
                 android:id="@+id/etv_name7"/>
         </LinearLayout>
@@ -185,7 +178,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:ettEmptyText="Add"
-                app:ettTextMarginLeft="10dp"
                 android:id="@+id/etv_name8"/>
         </LinearLayout>
     </LinearLayout>
