@@ -267,8 +267,8 @@ public class MainFragment extends NoFragment implements SwitchMultiButton.OnSwit
 
     @Override
     public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-        state[view.getId() - R.id.switch1] = isChecked? '1' : '0';
         if (isConnected && !client.isClosed() && client.isConnected()){
+            state[view.getId() - R.id.switch1] = isChecked? '1' : '0';
             new Thread(new Runnable() {
                 @Override
                 public void run() {
